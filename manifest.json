@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "DSH Skin - Apple Style for DeepSeek",
+  "version": "1.0.0",
+  "description": "Apple-style glassmorphism skin for DeepSeek web chat. Custom background, adjustable glass transparency and blur.",
+  "description:zh-CN": "DeepSeek 网页版的苹果风格玻璃拟态皮肤。支持自定义背景、调节玻璃透明度与模糊度。",
+  "permissions": [],
+  "content_scripts": [
+    {
+      "matches": ["https://chat.deepseek.com/*"],
+      "css": ["styles.css"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*.png"],
+      "matches": ["https://chat.deepseek.com/*"]
+    }
+  ]
+}

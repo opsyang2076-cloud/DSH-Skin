@@ -1,0 +1,507 @@
+/* ============================================================
+ * DSH Skin - Apple Style for DeepSeek
+ * styles.css - 苹果风格玻璃拟态主题
+ *
+ * 所有视觉参数由 CSS 变量驱动，content.js 会在运行时
+ * 覆盖这些变量（透明度 / 模糊度 / 背景图 / 明暗模式）。
+ * ============================================================ */
+
+:root {
+  /* 玻璃面板颜色（RGB 分量，明暗模式由 data-dsh-theme 切换） */
+  --dsh-glass-rgb: 255, 255, 255;
+  --dsh-glass-border: rgba(255, 255, 255, 0.55);
+  --dsh-glass-highlight: rgba(255, 255, 255, 0.85);
+
+  /* 以下三项由设置面板实时控制 */
+  --dsh-alpha: 0.72;          /* 玻璃不透明度 0.1 - 1.0 */
+  --dsh-blur: 20px;           /* 背景模糊半径 */
+  --dsh-bg-image: none;       /* 背景图 / 渐变 */
+
+  /* 固定设计常量（Apple 规范） */
+  --dsh-radius: 14px;
+  --dsh-radius-lg: 18px;
+  --dsh-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  --dsh-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --dsh-text: #1d1d1f;
+  --dsh-text-secondary: #6e6e73;
+  --dsh-accent: #007aff;
+  --dsh-hairline: rgba(0, 0, 0, 0.08);
+}
+
+/* 深色模式 */
+:root[data-dsh-theme="dark"] {
+  --dsh-glass-rgb: 29, 29, 31;
+  --dsh-glass-border: rgba(255, 255, 255, 0.12);
+  --dsh-glass-highlight: rgba(255, 255, 255, 0.10);
+  --dsh-text: #f5f5f7;
+  --dsh-text-secondary: #a1a1a6;
+  --dsh-hairline: rgba(255, 255, 255, 0.10);
+  --dsh-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ============================================================
+ * 全局字体：SF Pro 系统栈
+ * ============================================================ */
+html[data-dsh-enabled="true"] body,
+html[data-dsh-enabled="true"] button,
+html[data-dsh-enabled="true"] input,
+html[data-dsh-enabled="true"] textarea {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "PingFang SC", "Helvetica Neue", "Microsoft YaHei",
+    "Segoe UI", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+ * 背景层：铺满视口的固定层，跟随设置切换
+ * ============================================================ */
+html[data-dsh-enabled="true"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--dsh-bg-color, #f5f5f7);
+  background-image: var(--dsh-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  pointer-events: none;
+}
+
+/* 确保页面主内容位于背景层之上 */
+html[data-dsh-enabled="true"] body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+ * 玻璃拟态表面
+ * 目标：侧边栏、顶栏、消息气泡、输入框、弹层
+ * DeepSeek 使用哈希类名，这里用结构化选择器保持兼容。
+ * ============================================================ */
+
+/* 侧边栏 */
+html[data-dsh-enabled="true"] aside,
+html[data-dsh-enabled="true"] [class*="sidebar"] {
+  background: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.85)) !important;
+  backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  border-right: 1px solid var(--dsh-hairline) !important;
+  color: var(--dsh-text) !important;
+}
+
+/* 顶栏 */
+html[data-dsh-enabled="true"] header,
+html[data-dsh-enabled="true"] [class*="top-bar"],
+html[data-dsh-enabled="true"] [class*="header"] {
+  background: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.9)) !important;
+  backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  border-bottom: 1px solid var(--dsh-hairline) !important;
+  color: var(--dsh-text) !important;
+}
+
+/* 对话主区域容器 */
+html[data-dsh-enabled="true"] main,
+html[data-dsh-enabled="true"] [class*="chat-container"],
+html[data-dsh-enabled="true"] [class*="conversation"] {
+  background: transparent !important;
+}
+
+/* 用户消息气泡：右对齐的蓝色玻璃气泡 */
+html[data-dsh-enabled="true"] [class*="message-item-user"],
+html[data-dsh-enabled="true"] [class*="user-message"] {
+  background: rgba(0, 122, 255, calc(var(--dsh-alpha) * 0.9)) !important;
+  backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  border-radius: var(--dsh-radius-lg) !important;
+  border-bottom-right-radius: 6px !important;
+  color: #ffffff !important;
+  box-shadow: var(--dsh-shadow-sm) !important;
+}
+
+/* AI 回复气泡：中性玻璃 */
+html[data-dsh-enabled="true"] [class*="message-item-machine"],
+html[data-dsh-enabled="true"] [class*="bot-message"],
+html[data-dsh-enabled="true"] .ds-markdown {
+  background: rgba(var(--dsh-glass-rgb), var(--dsh-alpha)) !important;
+  backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  border-radius: var(--dsh-radius-lg) !important;
+  border-bottom-left-radius: 6px !important;
+  border: 1px solid var(--dsh-glass-border) !important;
+  box-shadow: var(--dsh-shadow-sm) !important;
+  color: var(--dsh-text) !important;
+}
+
+/* 输入框区域 */
+html[data-dsh-enabled="true"] [class*="chat-input"],
+html[data-dsh-enabled="true"] [class*="input-container"],
+html[data-dsh-enabled="true"] textarea {
+  background: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.95)) !important;
+  backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+  border-radius: var(--dsh-radius-lg) !important;
+  border: 1px solid var(--dsh-glass-border) !important;
+  color: var(--dsh-text) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+html[data-dsh-enabled="true"] textarea:focus {
+  border-color: rgba(0, 122, 255, 0.6) !important;
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15) !important;
+  outline: none !important;
+}
+
+/* 弹层、下拉菜单 */
+html[data-dsh-enabled="true"] [class*="popover"],
+html[data-dsh-enabled="true"] [class*="dropdown"],
+html[data-dsh-enabled="true"] [class*="menu-popup"] {
+  background: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.95)) !important;
+  backdrop-filter: saturate(180%) blur(calc(var(--dsh-blur) + 6px)) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(calc(var(--dsh-blur) + 6px)) !important;
+  border-radius: var(--dsh-radius) !important;
+  border: 1px solid var(--dsh-glass-border) !important;
+  box-shadow: var(--dsh-shadow) !important;
+}
+
+/* 滚动条：iOS 细滚动条 */
+html[data-dsh-enabled="true"] ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+html[data-dsh-enabled="true"] ::-webkit-scrollbar-thumb {
+  background: rgba(var(--dsh-glass-rgb), 0.35);
+  border-radius: 3px;
+}
+html[data-dsh-enabled="true"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--dsh-glass-rgb), 0.55);
+}
+html[data-dsh-enabled="true"] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 按钮：Apple 蓝色主按钮 */
+html[data-dsh-enabled="true"] button[class*="send"],
+html[data-dsh-enabled="true"] [class*="send-button"] {
+  background: var(--dsh-accent) !important;
+  border-radius: 9999px !important;
+  color: #fff !important;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+html[data-dsh-enabled="true"] button[class*="send"]:active {
+  transform: scale(0.94);
+}
+
+/* ============================================================
+ * 设置面板（悬浮球 + 面板本体）
+ * 由 content.js 动态创建，类名带 dsh- 前缀避免冲突
+ * ============================================================ */
+
+/* 悬浮球 */
+.dsh-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2147483646;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+.dsh-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.dsh-fab:active {
+  transform: scale(0.94);
+}
+:root[data-dsh-theme="dark"] .dsh-fab {
+  background: rgba(44, 44, 46, 0.72);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 面板 */
+.dsh-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 84px;
+  z-index: 2147483647;
+  width: 320px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  border-radius: var(--dsh-radius-lg);
+  border: 1px solid var(--dsh-glass-border);
+  background: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) + 0.14));
+  backdrop-filter: saturate(180%) blur(calc(var(--dsh-blur) + 8px));
+  -webkit-backdrop-filter: saturate(180%) blur(calc(var(--dsh-blur) + 8px));
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25), inset 0 1px 0 var(--dsh-glass-highlight);
+  color: var(--dsh-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.dsh-panel.dsh-panel--open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.dsh-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--dsh-hairline);
+  position: sticky;
+  top: 0;
+  background: inherit;
+  border-radius: var(--dsh-radius-lg) var(--dsh-radius-lg) 0 0;
+  backdrop-filter: inherit;
+}
+.dsh-panel__title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.dsh-panel__close {
+  border: none;
+  background: rgba(120, 120, 128, 0.16);
+  color: var(--dsh-text-secondary);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dsh-panel__close:hover {
+  background: rgba(120, 120, 128, 0.28);
+}
+
+.dsh-panel__section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--dsh-hairline);
+}
+.dsh-panel__section:last-child {
+  border-bottom: none;
+}
+.dsh-panel__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dsh-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+.dsh-panel__label .dsh-panel__value {
+  font-weight: 500;
+  color: var(--dsh-accent);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* 预设背景网格 */
+.dsh-swatches {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.dsh-swatch {
+  height: 40px;
+  border-radius: 9px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+.dsh-swatch:hover {
+  transform: scale(1.06);
+}
+.dsh-swatch.dsh-swatch--active {
+  border-color: var(--dsh-accent);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.25);
+}
+.dsh-swatch span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+/* 自定义背景输入行 */
+.dsh-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.dsh-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--dsh-hairline);
+  background: rgba(120, 120, 128, 0.10);
+  color: var(--dsh-text);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.dsh-input:focus {
+  border-color: rgba(0, 122, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
+}
+.dsh-btn {
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--dsh-accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.12s ease, opacity 0.15s ease;
+}
+.dsh-btn:hover {
+  opacity: 0.9;
+}
+.dsh-btn:active {
+  transform: scale(0.96);
+}
+.dsh-btn--ghost {
+  background: rgba(120, 120, 128, 0.14);
+  color: var(--dsh-text);
+}
+
+/* 分段控件（明暗模式） */
+.dsh-segmented {
+  display: flex;
+  background: rgba(120, 120, 128, 0.14);
+  border-radius: 9px;
+  padding: 2px;
+}
+.dsh-segmented button {
+  flex: 1;
+  border: none;
+  padding: 6px 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dsh-text);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+.dsh-segmented button.dsh-active {
+  background: rgba(var(--dsh-glass-rgb), 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+:root[data-dsh-theme="dark"] .dsh-segmented button.dsh-active {
+  background: rgba(80, 80, 84, 1);
+}
+
+/* 滑块：iOS 样式 */
+.dsh-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(120, 120, 128, 0.24);
+  outline: none;
+  cursor: pointer;
+  margin: 10px 0 2px;
+}
+.dsh-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  cursor: grab;
+  transition: transform 0.12s ease;
+}
+.dsh-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.12);
+}
+:root[data-dsh-theme="dark"] .dsh-slider::-webkit-slider-thumb {
+  background: #f5f5f7;
+}
+
+/* 底部操作行 */
+.dsh-panel__footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 16px;
+}
+.dsh-panel__footer .dsh-btn {
+  flex: 1;
+}
+
+/* 开关行 */
+.dsh-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.dsh-switch-row span {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* iOS 开关 */
+.dsh-switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  background: rgba(120, 120, 128, 0.32);
+  cursor: pointer;
+  transition: background 0.25s ease;
+  flex-shrink: 0;
+}
+.dsh-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.dsh-switch.dsh-switch--on {
+  background: #34c759;
+}
+.dsh-switch.dsh-switch--on::after {
+  transform: translateX(18px);
+}
