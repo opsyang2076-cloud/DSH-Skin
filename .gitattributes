@@ -1,0 +1,5 @@
+# 统一换行符，避免 Windows CRLF 混入仓库
+* text=auto eol=lf
+
+# 二进制资源不做转换
+*.png binary
