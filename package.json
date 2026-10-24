@@ -1,0 +1,26 @@
+{
+  "name": "dsh-skin",
+  "version": "1.0.0",
+  "description": "Apple-style glassmorphism skin for DeepSeek web chat",
+  "description:zh-CN": "DeepSeek 网页版的苹果风格玻璃拟态皮肤",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opsyang2076-cloud/DSH-Skin.git"
+  },
+  "keywords": [
+    "deepseek",
+    "skin",
+    "theme",
+    "apple-style",
+    "glassmorphism",
+    "userscript"
+  ],
+  "files": [
+    "manifest.json",
+    "styles.css",
+    "content.js",
+    "dsh-skin.user.js",
+    "icons"
+  ]
+}
