@@ -31,6 +31,20 @@
 3. 删除模板内容，粘贴 `dsh-skin.user.js` 的全部内容，保存（Ctrl+S）
 4. 打开 chat.deepseek.com 即可
 
+### 方式三：DeepSeek Harness 桌面应用插件（Cordis）
+
+1. 打开 DeepSeek Harness 的「插件」页面，点击右上角「添加插件」
+2. 插件地址填写完整的 HTTPS 地址（注意必须带 `https://` 前缀，否则 pnpm 会报 unsupported protocol）：
+
+   ```
+   https://github.com/opsyang2076-cloud/DSH-Skin.git
+   ```
+
+3. 安装完成后插件会出现在插件列表中，启用即可
+4. 打开聊天界面，右下角出现调色盘悬浮球，点击进入设置面板
+
+原理：插件监听 Cordis 的 `webserver/index-inject` 事件，把玻璃拟态样式和设置面板脚本注入到客户端页面，与内置主题插件同一机制。
+
 ## 使用
 
 页面右下角有一个调色盘悬浮球，点击打开设置面板：
@@ -52,10 +66,14 @@
 
 ```
 DSH-Skin/
-├── manifest.json        # 扩展清单（Manifest V3）
+├── manifest.json        # Chrome 扩展清单（Manifest V3）
 ├── styles.css           # 主题样式（扩展版）
 ├── content.js           # 设置面板与状态逻辑（扩展版）
 ├── dsh-skin.user.js     # 油猴单文件版，样式和逻辑内联
+├── lib/                 # DeepSeek Harness（Cordis）插件版
+│   ├── index.js         #   插件入口：向客户端页面注入样式与脚本
+│   ├── page.css         #   注入的完整样式
+│   └── page.js          #   注入的悬浮球设置面板
 ├── icons/               # 扩展图标
 ├── LICENSE              # MIT
 ├── README.md            # 本文件

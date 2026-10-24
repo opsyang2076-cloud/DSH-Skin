@@ -31,6 +31,20 @@ An Apple-style glassmorphism skin for the DeepSeek web app (chat.deepseek.com). 
 3. Replace the template with the full contents of `dsh-skin.user.js` and save (Ctrl+S)
 4. Open chat.deepseek.com
 
+### Option 3: DeepSeek Harness desktop plugin (Cordis)
+
+1. Open the Plugins page in DeepSeek Harness and click "Add plugin" in the top-right corner
+2. Enter the full HTTPS URL (the `https://` prefix is required, otherwise pnpm reports an unsupported protocol error):
+
+   ```
+   https://github.com/opsyang2076-cloud/DSH-Skin.git
+   ```
+
+3. After installation the plugin appears in the plugin list; enable it
+4. Open the chat view; a palette floating ball appears at the bottom-right
+
+How it works: the plugin listens on Cordis's `webserver/index-inject` event and injects the glassmorphism styles and the settings panel script into the client page, using the same mechanism as the built-in theme plugin.
+
 ## Usage
 
 A palette floating ball sits at the bottom-right of the page. Click it to open the settings panel:
@@ -52,10 +66,14 @@ Hold and drag the floating ball anywhere you like; the position is remembered.
 
 ```
 DSH-Skin/
-├── manifest.json        # Extension manifest (Manifest V3)
+├── manifest.json        # Chrome extension manifest (Manifest V3)
 ├── styles.css           # Theme styles (extension version)
 ├── content.js           # Settings panel and state logic (extension version)
 ├── dsh-skin.user.js     # Single-file userscript with inlined styles and logic
+├── lib/                 # DeepSeek Harness (Cordis) plugin version
+│   ├── index.js         #   Plugin entry: injects styles and scripts into the client page
+│   ├── page.css         #   Injected stylesheet
+│   └── page.js          #   Injected floating-ball settings panel
 ├── icons/               # Extension icons
 ├── LICENSE              # MIT
 ├── README.md            # Chinese documentation

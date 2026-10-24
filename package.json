@@ -1,26 +1,36 @@
 {
   "name": "dsh-skin",
-  "version": "1.0.0",
-  "description": "Apple-style glassmorphism skin for DeepSeek web chat",
-  "description:zh-CN": "DeepSeek 网页版的苹果风格玻璃拟态皮肤",
+  "version": "1.1.0",
+  "description": "Apple-style glassmorphism skin for DeepSeek Harness (Cordis plugin)",
+  "description:zh-CN": "DeepSeek Harness 苹果风格玻璃拟态皮肤插件（Cordis）",
   "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/opsyang2076-cloud/DSH-Skin.git"
   },
   "keywords": [
     "deepseek",
+    "deepseek-harness",
+    "dsh",
+    "cordis",
     "skin",
     "theme",
     "apple-style",
-    "glassmorphism",
-    "userscript"
+    "glassmorphism"
   ],
   "files": [
+    "lib",
     "manifest.json",
     "styles.css",
     "content.js",
     "dsh-skin.user.js",
-    "icons"
+    "icons",
+    "README.md",
+    "LICENSE"
   ]
 }
