@@ -25,6 +25,42 @@
   --dsh-hairline: rgba(255, 255, 255, 0.10);
 }
 
+/* 玻璃配色跟随应用自身的明暗状态（应用把深色标记在 body 上） */
+html[data-dsh-enabled="true"] body[data-ds-dark-theme] {
+  --dsh-glass-rgb: 29, 29, 31;
+  --dsh-text: #f5f5f7;
+  --dsh-text-secondary: #a1a1a6;
+  --dsh-hairline: rgba(255, 255, 255, 0.10);
+  --dsh-bg-color: #1c1c1e;
+}
+
+/* ============================================================
+ * Harness 界面 token 覆写：让整块 UI 变成玻璃
+ * 画布层透明露出壁纸；表面层变半透明玻璃色；菜单接管模糊滤镜。
+ * ============================================================ */
+html[data-dsh-enabled="true"] body {
+  --dsw-alias-bg-base: transparent !important;
+  --dsw-alias-bg-module-platform: transparent !important;
+  --dsw-alias-bg-layer-1: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.55)) !important;
+  --dsw-alias-bg-layer-2: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.75)) !important;
+  --dsw-alias-bg-layer-3: rgba(var(--dsh-glass-rgb), var(--dsh-alpha)) !important;
+  --dsw-alias-bg-layer-4: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.92)) !important;
+  --dsw-alias-bg-overlay: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.95)) !important;
+  --dsw-menu-surface-fill: rgba(var(--dsh-glass-rgb), calc(var(--dsh-alpha) * 0.9)) !important;
+  --dsw-menu-backdrop-filter: saturate(180%) blur(var(--dsh-blur)) !important;
+}
+
+/* 结构化容器的实时背景模糊（菜单/弹层之外的主体区域） */
+html[data-dsh-enabled="true"] #root aside,
+html[data-dsh-enabled="true"] #root header,
+html[data-dsh-enabled="true"] #root main,
+html[data-dsh-enabled="true"] [class*="sidebar"],
+html[data-dsh-enabled="true"] [class*="conversation"],
+html[data-dsh-enabled="true"] [class*="composer"] {
+  backdrop-filter: saturate(160%) blur(var(--dsh-blur));
+  -webkit-backdrop-filter: saturate(160%) blur(var(--dsh-blur));
+}
+
 /* ---------- 全局：字体与背景 ---------- */
 html[data-dsh-enabled="true"] body {
   background: var(--dsh-bg-color) !important;

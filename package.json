@@ -1,6 +1,6 @@
 {
   "name": "dsh-skin",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Apple-style glassmorphism skin for DeepSeek Harness (Cordis bundle)",
   "description:zh-CN": "DeepSeek Harness 苹果风格玻璃拟态皮肤组合包（Cordis）",
   "license": "MIT",
@@ -22,7 +22,9 @@
     "LICENSE"
   ],
   "dsh": {
-    "bundle": { "patch": "./cordis.patch.yml" },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "platform": "web",
       "immediately": true,
