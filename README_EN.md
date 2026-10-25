@@ -43,7 +43,7 @@ An Apple-style glassmorphism skin for the DeepSeek web app (chat.deepseek.com). 
 3. After installation the plugin appears in the plugin list; enable it
 4. Open the chat view; a palette floating ball appears at the bottom-right
 
-How it works: the plugin listens on Cordis's `webserver/index-inject` event and injects the glassmorphism styles and the settings panel script into the client page, using the same mechanism as the built-in theme plugin.
+How it works: the package follows the official bundle convention by declaring `dsh.bundle.patch` and `dsh.client` in package.json. The host half (index.js) is a no-op; the client half (client.js) registers into the web client through `window.__ModuleLoader__`, injects the glassmorphism styles and the floating-ball settings panel, and manages the style lifecycle with `ctx.effect` (styles are removed automatically when the plugin is disabled).
 
 ## Usage
 
@@ -66,15 +66,20 @@ Hold and drag the floating ball anywhere you like; the position is remembered.
 
 ```
 DSH-Skin/
-├── manifest.json        # Chrome extension manifest (Manifest V3)
-├── styles.css           # Theme styles (extension version)
-├── content.js           # Settings panel and state logic (extension version)
-├── dsh-skin.user.js     # Single-file userscript with inlined styles and logic
-├── lib/                 # DeepSeek Harness (Cordis) plugin version
-│   ├── index.js         #   Plugin entry: injects styles and scripts into the client page
-│   ├── page.css         #   Injected stylesheet
-│   └── page.js          #   Injected floating-ball settings panel
-├── icons/               # Extension icons
+├── index.js             # Cordis bundle host entry (no-op)
+├── client.js            # Client module: injects styles + floating panel (generated)
+├── cordis.patch.yml     # Bundle patch: inserts the dsh-skin plugin row
+├── icon.svg             # Plugin icon
+├── lib/                 # Client sources
+│   ├── page.css         #   Glass theme + panel styles
+│   └── page.js          #   Floating-ball settings panel logic
+├── scripts/
+│   └── build-client.mjs #   Inlines lib/ into client.js
+├── manifest.json        # Chrome extension manifest (Manifest V3, optional form)
+├── styles.css           # Theme styles (Chrome extension version)
+├── content.js           # Settings panel logic (Chrome extension version)
+├── dsh-skin.user.js     # Single-file userscript
+├── icons/               # Chrome extension icons
 ├── LICENSE              # MIT
 ├── README.md            # Chinese documentation
 └── README_EN.md         # This file

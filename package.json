@@ -1,13 +1,33 @@
 {
   "name": "dsh-skin",
-  "version": "1.1.0",
-  "description": "Apple-style glassmorphism skin for DeepSeek Harness (Cordis plugin)",
-  "description:zh-CN": "DeepSeek Harness 苹果风格玻璃拟态皮肤插件（Cordis）",
+  "version": "1.2.0",
+  "description": "Apple-style glassmorphism skin for DeepSeek Harness (Cordis bundle)",
+  "description:zh-CN": "DeepSeek Harness 苹果风格玻璃拟态皮肤组合包（Cordis）",
   "license": "MIT",
   "type": "module",
-  "main": "lib/index.js",
+  "main": "index.js",
   "exports": {
-    ".": "./lib/index.js"
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "icon.svg",
+    "lib",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
   },
   "repository": {
     "type": "git",
@@ -22,15 +42,5 @@
     "theme",
     "apple-style",
     "glassmorphism"
-  ],
-  "files": [
-    "lib",
-    "manifest.json",
-    "styles.css",
-    "content.js",
-    "dsh-skin.user.js",
-    "icons",
-    "README.md",
-    "LICENSE"
   ]
 }

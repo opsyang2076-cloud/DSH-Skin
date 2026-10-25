@@ -43,7 +43,7 @@
 3. 安装完成后插件会出现在插件列表中，启用即可
 4. 打开聊天界面，右下角出现调色盘悬浮球，点击进入设置面板
 
-原理：插件监听 Cordis 的 `webserver/index-inject` 事件，把玻璃拟态样式和设置面板脚本注入到客户端页面，与内置主题插件同一机制。
+原理：本包按官方组合包（bundle）规范声明了 `dsh.bundle.patch` 与 `dsh.client`。宿主半边（index.js）是空实现；客户端半边（client.js）通过 `window.__ModuleLoader__` 注册进 Web 客户端，注入玻璃拟态样式和悬浮球设置面板，并用 `ctx.effect` 管理样式的生命周期（禁用插件时自动移除）。
 
 ## 使用
 
@@ -66,15 +66,20 @@
 
 ```
 DSH-Skin/
-├── manifest.json        # Chrome 扩展清单（Manifest V3）
-├── styles.css           # 主题样式（扩展版）
-├── content.js           # 设置面板与状态逻辑（扩展版）
-├── dsh-skin.user.js     # 油猴单文件版，样式和逻辑内联
-├── lib/                 # DeepSeek Harness（Cordis）插件版
-│   ├── index.js         #   插件入口：向客户端页面注入样式与脚本
-│   ├── page.css         #   注入的完整样式
-│   └── page.js          #   注入的悬浮球设置面板
-├── icons/               # 扩展图标
+├── index.js             # Cordis 组合包宿主入口（空实现）
+├── client.js            # 客户端模块：注入样式 + 悬浮球面板（由脚本生成）
+├── cordis.patch.yml     # 组合包补丁：向配置树插入 dsh-skin 插件行
+├── icon.svg             # 插件图标
+├── lib/                 # 客户端源码
+│   ├── page.css         #   玻璃拟态主题 + 面板样式
+│   └── page.js          #   悬浮球设置面板逻辑
+├── scripts/
+│   └── build-client.mjs #   把 lib/ 内联打包成 client.js
+├── manifest.json        # Chrome 扩展清单（Manifest V3，可选形态）
+├── styles.css           # 主题样式（Chrome 扩展版）
+├── content.js           # 设置面板逻辑（Chrome 扩展版）
+├── dsh-skin.user.js     # 油猴单文件版
+├── icons/               # Chrome 扩展图标
 ├── LICENSE              # MIT
 ├── README.md            # 本文件
 └── README_EN.md         # 英文说明
