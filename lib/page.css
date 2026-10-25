@@ -61,6 +61,16 @@ html[data-dsh-enabled="true"] [class*="composer"] {
   -webkit-backdrop-filter: saturate(160%) blur(var(--dsh-blur));
 }
 
+/* 兜底：顶层布局壳层强制透明，确保壁纸可见 */
+html[data-dsh-enabled="true"] #root {
+  background: transparent !important;
+}
+html[data-dsh-enabled="true"] #root > div,
+html[data-dsh-enabled="true"] #root > div > div {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
 /* ---------- 全局：字体与背景 ---------- */
 html[data-dsh-enabled="true"] body {
   background: var(--dsh-bg-color) !important;
